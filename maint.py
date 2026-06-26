@@ -114,7 +114,10 @@ async def GeNeRaTeAccEss(uid , password):
         "client_id": "100067"}
     async with aiohttp.ClientSession() as session:
         async with session.post(url, headers=Hr, data=data) as response:
-            if response.status != 200: return "Failed to get access token"
+            if response.status != 200:
+                body = await response.text()
+                print(f"- GeNeRaTeAccEss FaiLed [{response.status}] for uid={uid}: {body[:300]}")
+                return (None, None)
             data = await response.json()
             open_id = data.get("open_id")
             access_token = data.get("access_token")
